@@ -1,10 +1,16 @@
 ﻿<Window x:Class="ExamenVoorbereiding.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:ExamenVoorbereiding.VM"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:controls="clr-namespace:CustomControls;assembly=Controls"
         xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
         Title="MainWindow" Height="466.8" Width="525">
+    <Window.DataContext>
+        <vm:DashboardVM/>
+    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="168.8"/>
@@ -14,18 +20,18 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBox x:Name="txtGemetenVermogen" IsEnabled="False" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="20.8,31,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <TextBox Text="{Binding GemetenVermogen}" IsEnabled="False" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="20.8,31,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
         <Label Content="Gemeten vermogen" HorizontalAlignment="Right" Margin="0,31,10.2,0" VerticalAlignment="Top"/>
-        <xctk:IntegerUpDown x:Name="txtVermogenDrempel"  Margin="20.8,59,118.4,86.409" Grid.Column="1" />
-        <controls:CCAanUit x:Name="chkAuto" Margin="20.8,87,118.4,61.409" Grid.Column="1" />
-        <controls:CCAanUit x:Name="chkMachineDraait" Margin="20.8,112,118.4,36.409" Grid.Column="1" />
-        <controls:PushButton x:Name="btnStartStop" Margin="20.8,137,118.4,4.409" Grid.Column="1" />
+        <xctk:IntegerUpDown Text="{Binding VermogenDrempel}" x:Name="txtVermogenDrempel"  Margin="20.8,59,118.4,86.409" Grid.Column="1" />
+        <CheckBox IsChecked="{Binding Auto}" Margin="20.8,87,118.4,61.409" Grid.Column="1" />
+        <CheckBox IsChecked="{Binding MachineDraait}"  Margin="20.8,112,118.4,36.409" Grid.Column="1" />
+        <Button Content="push" Command="{Binding StartStopAction}" Margin="20.8,138,118.4,8.8" Grid.Column="1" />
         <Label Content="Vermogensdrempel" HorizontalAlignment="Left" Margin="134,59,0,0" VerticalAlignment="Top"/>
         <Label Content="Automatisch" HorizontalAlignment="Right" Margin="0,81,10.2,0" VerticalAlignment="Top" RenderTransformOrigin="0.316,0.508"/>
         <Label Content="Wasmachine draait?" Margin="0,104,1.2,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120"/>
         <Label Content="Start/Stop" HorizontalAlignment="Left" Margin="185,137,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.778,0.398"/>
         <chartingToolkit:Chart x:Name="chart" Margin="8" Grid.ColumnSpan="2" Grid.Row="1" >
-            <chartingToolkit:LineSeries x:Name="line" Title="Vermogen"/>
+            <chartingToolkit:LineSeries x:Name="line" Title="Vermogen" ItemsSource="{Binding Points}" IndependentValuePath="X" DependentValuePath="Y"/>
         </chartingToolkit:Chart>
     </Grid>
 </Window>
