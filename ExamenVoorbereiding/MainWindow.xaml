@@ -6,7 +6,7 @@
         xmlns:controls="clr-namespace:CustomControls;assembly=Controls"
         xmlns:chartingToolkit="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Extras.WPF4"
+        xmlns:cmd="http://www.galasoft.ch/mvvmlight"
         Title="MainWindow" Height="466.8" Width="525">
     <Window.DataContext>
         <vm:DashboardVM/>
@@ -22,14 +22,25 @@
         </Grid.ColumnDefinitions>
         <TextBox Text="{Binding GemetenVermogen}" IsEnabled="False" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="20.8,31,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
         <Label Content="Gemeten vermogen" HorizontalAlignment="Right" Margin="0,31,10.2,0" VerticalAlignment="Top"/>
-        <xctk:IntegerUpDown Text="{Binding VermogenDrempel}" x:Name="txtVermogenDrempel"  Margin="20.8,59,118.4,86.409" Grid.Column="1" />
-        <CheckBox IsChecked="{Binding Auto}" Margin="20.8,87,118.4,61.409" Grid.Column="1" />
-        <CheckBox IsChecked="{Binding MachineDraait}"  Margin="20.8,112,118.4,36.409" Grid.Column="1" />
-        <Button Content="push" Command="{Binding StartStopAction}" Margin="20.8,138,118.4,8.8" Grid.Column="1" />
-        <Label Content="Vermogensdrempel" HorizontalAlignment="Left" Margin="134,59,0,0" VerticalAlignment="Top"/>
+        <xctk:IntegerUpDown Text="{Binding VermogenDrempel}" x:Name="txtVermogenDrempel"  Margin="20.8,59,0,86.8" Grid.Column="1" HorizontalAlignment="Left" Width="120" />
+        <CheckBox IsChecked="{Binding Auto}" Margin="20.8,87,0,61.8" Grid.Column="1" HorizontalAlignment="Left" Width="120" />
+        <CheckBox IsChecked="{Binding MachineDraait}"  Margin="20.8,112,0,36.8" Grid.Column="1" HorizontalAlignment="Left" Width="120" />
+        <Button Content="push" Margin="20.8,138,0,8.8" Grid.Column="1" HorizontalAlignment="Left" Width="120" >
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="PreviewMouseDown">
+                    <cmd:EventToCommand
+                        Command="{Binding PushButtonDownCommand}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="PreviewMouseUp">
+                    <cmd:EventToCommand
+                        Command="{Binding PushButtonUpCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Button>
+        <Label Content="Vermogensdrempel" HorizontalAlignment="Right" Margin="0,59,10.2,0" VerticalAlignment="Top"/>
         <Label Content="Automatisch" HorizontalAlignment="Right" Margin="0,81,10.2,0" VerticalAlignment="Top" RenderTransformOrigin="0.316,0.508"/>
         <Label Content="Wasmachine draait?" Margin="0,104,1.2,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120"/>
-        <Label Content="Start/Stop" HorizontalAlignment="Left" Margin="185,137,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.778,0.398"/>
+        <Label Content="Start/Stop" HorizontalAlignment="Right" Margin="0,137,10.2,0" VerticalAlignment="Top" RenderTransformOrigin="0.778,0.398"/>
         <chartingToolkit:Chart x:Name="chart" Margin="8" Grid.ColumnSpan="2" Grid.Row="1" >
             <chartingToolkit:LineSeries x:Name="line" Title="Vermogen" ItemsSource="{Binding Points}" IndependentValuePath="X" DependentValuePath="Y"/>
         </chartingToolkit:Chart>

@@ -170,17 +170,29 @@ namespace ExamenVoorbereiding.VM
             OnPropertyChanged("Drukknop");
         }
 
-        public ICommand StartStopAction
+        public ICommand PushButtonDownCommand
         {
             get
             {
-                return new RelayCommand(StartStop);
+                return new RelayCommand(Start);
             }
         }
 
-        private void StartStop()
+        public ICommand PushButtonUpCommand
+        {
+            get
+            {
+                return new RelayCommand(Stop);
+            }
+        }
+
+        private void Start()
         {
             Drukknop = true;
+        }
+
+        private void Stop()
+        {
             Drukknop = false;
         }
 
