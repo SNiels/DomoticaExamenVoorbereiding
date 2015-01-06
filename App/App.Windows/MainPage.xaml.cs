@@ -27,10 +27,11 @@ namespace App
     public sealed partial class MainPage : Page
     {
         private const string BASE_URI = @"http://localhost:9000/";
-        private const string BASE_PATH = "PLC.";
+        private const string BASE_PATH = "examenvoorbereding.PLC.";
         private IEnumerable<WCFNode> _nodes;
         private WCFNode _isAanNode;
         private WCFNode _vermogenNode;
+        private DispatcherTimer _timer;
         public MainPage()
         {
             this.InitializeComponent();
@@ -42,9 +43,20 @@ namespace App
             _nodes = await GetWCFNodes(new Uri(BASE_URI+"GetWCFNodes"));
             _vermogenNode = _nodes.SingleOrDefault(node => node.ItemId == BASE_PATH + "Vermogen");
             _isAanNode = _nodes.SingleOrDefault(node => node.ItemId == BASE_PATH + "IsWasMachineAan");
-            txtVermogen.Text = "Het vermogen is " + await GetWCFValue(_vermogenNode.ItemId) + "W.";
+            await GetData();
+            _timer = new DispatcherTimer();
+            _timer.Interval = new TimeSpan(0, 0, 1);
+            _timer.Tick+= (ticksender,eventParams)=>{
+                GetData();
+            };
+            _timer.Start();
+        }
+
+        private async Task GetData()
+        {
+            txtVermogen.Text = "Het voltage is " + await GetWCFValue(_vermogenNode.ItemId) + "V.";
             bool isAan = bool.Parse((await GetWCFValue(_isAanNode.ItemId)));
-            txtIsAan.Text = "De machine is "+ (isAan ? "aan":"uit")+".";
+            txtIsAan.Text = "De machine is " + (isAan ? "aan" : "uit") + ".";
         }
 
 
@@ -65,7 +77,8 @@ namespace App
         public static async Task<string> GetWCFValue(string itemId)
         {
             HttpClient client = new HttpClient();
-            return await client.GetStringAsync(new Uri(BASE_URI + @"GetWCFNodeValue/" + itemId));
+            int unixTimestamp = (int)(DateTime.Now.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            return await client.GetStringAsync(new Uri(BASE_URI + @"GetWCFNodeValue/" + itemId+"?time="+unixTimestamp));
         }
     }
 }
