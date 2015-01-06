@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace ExamenVoorbereiding.VM
     public class DashboardVM:INotifyPropertyChanged
     {
 
-        private const string BASE_PATH = "examenvoorbereiding simulation.PLC.";
+        private const string BASE_PATH = "examenvoorbereding.PLC.";
         private OPCServerWrapper _server;
         private OPCNodeWrapper _automatischWrapperNode;
         private OPCNodeWrapper _vermogenWrapperNode;
@@ -179,7 +180,8 @@ namespace ExamenVoorbereiding.VM
 
         private void StartStop()
         {
-            Drukknop = !Drukknop;
+            Drukknop = true;
+            Drukknop = false;
         }
 
         void _tmr_Tick(object sender, EventArgs e)
